@@ -10,7 +10,7 @@ my $token = read_file("./token");
 chomp($token);
 my $api = WWW::Telegram::BotAPI->new(token => $token);
 my $me = $api->getMe or die "could not getMe";
-say "I am ". $me->{user}{name};
+say "I am ". Dumper($me);
 
 my $updates;
 my $offset;
