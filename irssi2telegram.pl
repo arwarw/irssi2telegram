@@ -7,15 +7,15 @@ use WWW::Telegram::BotAPI;
 use Data::Dumper qw(Dumper);
 use v5.18;
 
-my $token = read_file("./token");
-my $user = read_file("./destination_user");
+my $token = read_file($ENV{HOME}."/.irssi2telegram/token");
+my $user = read_file($ENV{HOME}.".irssi2telegram/destination_user");
 chomp ($user);
 chomp($token);
 my $log;
 open $log, ">", $ENV{HOME}."/irssi2telegram.log" || die "could not open log: $!";
 
 my $api = WWW::Telegram::BotAPI->new(token => $token);
-my $me = $api->getMe or die "could not getMe";
+my $me = $api->getMe or say $log "could not getMe";
 say $log "I am ". Dumper($me);
 
 my $updates;
