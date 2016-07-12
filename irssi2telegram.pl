@@ -1,16 +1,19 @@
 #!/usr/bin/perl
-#
+
 use strict;
 use Irssi;
 use File::Slurp;
 use WWW::Telegram::BotAPI;
 use Data::Dumper qw(Dumper);
 use v5.18;
+use vars qw(%IRSSI);
 
 my $token = read_file($ENV{HOME}."/.irssi2telegram/token");
-my $user = read_file($ENV{HOME}.".irssi2telegram/destination_user");
-chomp ($user);
+my $user = read_file($ENV{HOME}."/.irssi2telegram/destination_user");
+my $channel_id = read_file($ENV{HOME}."/.irssi2telegram/destination_channel");
+chomp($user);
 chomp($token);
+chomp($channel_id);
 my $log;
 open $log, ">", $ENV{HOME}."/irssi2telegram.log" || die "could not open log: $!";
 
@@ -20,7 +23,7 @@ say $log "I am ". Dumper($me);
 
 my $updates;
 my $offset;
-my $last_update_time = time;
+my $last_update_time = 0;
 
 %IRSSI = (authors => "Alexander Wuerstlein", contact => 'arw@arw.name', name => 'irssi2telegram', 
 	description => 'send irssi highlights to a telegram destination', license => 'GNU GPLv3', );
@@ -29,13 +32,14 @@ Irssi::signal_add('print text' => sub {
 	my ($dest, $text, $stripped) = @_;
 	my $opt = MSGLEVEL_HILIGHT | MSGLEVEL_MSGS;
 
-	if (($dest->{level} & $opt) &&
-		(($dest->level & MSGLEVEL_NOHIGHLIGHT) == 0) {
-		send_text($text);
-	}
 	if (time - $last_update_time > 60) {
 		$last_update_time = time;
 		get_updates();
+	}
+
+	if (($dest->{level} & ($opt)) &&
+		(($dest->{level} & MSGLEVEL_NOHILIGHT) == 0)) {
+		send_text($stripped);
 	}
 });
 
@@ -54,5 +58,8 @@ sub get_updates {
 
 sub send_text {
 	my $text = shift;
-	$api->sendMessage({ chat_id => "$user", text => "$text", });
+	my $chat = $api->getChat({chat_id => $channel_id});
+	say $log Dumper($chat);
+	die "username for destination channel does not match" unless $chat->{result}->{username} eq $user;
+	$api->sendMessage({ chat_id => $channel_id, text => "$text", });
 }
