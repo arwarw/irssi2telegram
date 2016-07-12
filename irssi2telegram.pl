@@ -44,7 +44,7 @@ Irssi::signal_add('print text' => sub {
 });
 
 sub get_updates {
-	$updates = $api->getUpdates({timeout => 30, $offset?(offset => $offset):()});
+	$updates = $api->getUpdates({timeout => 0, $offset?(offset => $offset):()});
 	unless ($updates and ref $updates eq "HASH" and $updates->{ok}) {
 		say $log "updates weird";
 		next;
