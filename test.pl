@@ -6,7 +6,7 @@ use WWW::Telegram::BotAPI;
 use Data::Dumper qw(Dumper);
 use v5.18;
 
-my $token = read_file("./token");
+my $token = read_file($ENV{HOME}."/.irssi2telegram/token");
 chomp($token);
 my $api = WWW::Telegram::BotAPI->new(token => $token);
 my $me = $api->getMe or die "could not getMe";
