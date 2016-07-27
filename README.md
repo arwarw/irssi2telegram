@@ -37,7 +37,8 @@ running, connected to one or more IRC networks, etc.
    The token will look similar to `110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw`. Treat this
    token like a password, so keep it secret, but remember it, you'll need it later on.
 
-3. ```console
+3. Execute the following: 
+   ```console
    # mkdir -p ~/.irssi2telegram
    # chmod -R go-rwx ~/.irssi2telegram
    # echo "110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw" > ~/.irssi2telegram/token
@@ -81,12 +82,14 @@ running, connected to one or more IRC networks, etc.
 	   }
    };
    ```
+   
    Note that `{message}->{chat}->{type}` should be `private` and the value of `{message}->{chat}->{id}` should equal
    the value of `{message}->{from}->{id}`, here e.g. `123456789`.
    
    Abort test.pl via Ctrl-C.
 
-5. ```console
+5. Execute the following:
+   ```console
    echo "123456789" > ~/.irssi2telegram/destination_channel
    ```
    You need to replace the id by your value of `{message}->{from}->{id}`.
@@ -97,3 +100,17 @@ running, connected to one or more IRC networks, etc.
    17:59 Loaded scripts:
    17:59 irssi2telegram  /home/arw/.irssi/scripts/irssi2telegram.pl
    ```
+   
+7. Done. Test your setup by having someone highlight you in IRC. Your bot should forward all hightlight messages to your mobile device.
+
+## Sources
+The telegram bot API is very useful and one of the nicest things abour telegram:
+https://core.telegram.org/bots#botfather
+https://core.telegram.org/bots/api
+I think this API is something where the competition is sorely lacking.
+
+Half of the code is taken from and ananlogous to the `WWW::Telegram::BotAPI` usage examples:
+https://metacpan.org/pod/WWW::Telegram::BotAPI
+
+The other half is inspired by the hilightcmd.pl irssi script:
+https://github.com/irssi/scripts/blob/gh-pages/scripts/hilightcmd.pl
