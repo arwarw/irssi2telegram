@@ -17,7 +17,8 @@ running, connected to one or more IRC networks, etc.
    Distro packages the perl modules `File::Slurp` or `WWW::Telegram::BotAPI` as.
    Your irssi should include the irssi perl API, the Debian packages do at least.
    If you can't find `libwww-telegram-botapi-perl` (no surprise, since its not in the
-   official debian repos, create it yourself:
+   official debian repos) create it yourself:
+
    ```console
    $ dh-make-perl --cpan WWW::Telegram::BotAPI
    <if in doubt: press enter a few times>
@@ -26,13 +27,16 @@ running, connected to one or more IRC networks, etc.
    $ cd ..
    # dpkg -i libwww-telegram-botapi-perl_0.03-1_all.deb
    ```
+
    Maybe the version number in the last command will be higher by now. As always, `#` means:
    execute as root.
+
 2. In telegram, talk to `@botfather`. This is the special telegram bot that creates all other
    bots. Type `/newbot` to create your bot, pick a display name and username (which must end in
    `bot`, so e.g. `you_in_telegram_bot`) and remember those along with the token displayed there.
    The token will look similar to `110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw`. Treat this
    token like a password, so keep it secret, but remember it, you'll need it later on.
+
 3. ```console
    # mkdir -p ~/.irssi2telegram
    # chmod -R go-rwx ~/.irssi2telegram
@@ -40,6 +44,7 @@ running, connected to one or more IRC networks, etc.
    # echo "you_in_telegram" > ~/.irssi2telegram/destination_user
    ```
    Replace your telegram user (your personal one, not the bot!) and your bot token in the code above.
+
 4. Now you can test your bot by running test.pl:
    ```console
    # ./test.pl
@@ -55,7 +60,7 @@ running, connected to one or more IRC networks, etc.
    Talk to `@you_in_telegram_bot` in telegram and send a message to your bot (content does not matter).
    You should see something like this:
    ```console
-   Message from arwarw
+   Message from you_in_telegram
    $VAR1 = {
 	   'update_id' => 47110815,
 	   'message' => {
@@ -80,10 +85,12 @@ running, connected to one or more IRC networks, etc.
    the value of `{message}->{from}->{id}`, here e.g. `123456789`.
    
    Abort test.pl via Ctrl-C.
+
 5. ```console
    echo "123456789" > .irssi2telegram/destination_channel
    ```
    You need to replace the id by your value of `{message}->{from}->{id}`.
+
 6. Now you just need to load the script in irssi. For this, type `/script load ~/.irssi/scripts/irssi2telegram.pl` in irssi.
    You should not see any error messages. After typing `/script list` in irssi, a line like the following should appear:
    ```
