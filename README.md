@@ -87,7 +87,7 @@ running, connected to one or more IRC networks, etc.
    Abort test.pl via Ctrl-C.
 
 5. ```console
-   echo "123456789" > .irssi2telegram/destination_channel
+   echo "123456789" > ~/.irssi2telegram/destination_channel
    ```
    You need to replace the id by your value of `{message}->{from}->{id}`.
 
