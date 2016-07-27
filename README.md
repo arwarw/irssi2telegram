@@ -37,7 +37,8 @@ running, connected to one or more IRC networks, etc.
    The token will look similar to `110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw`. Treat this
    token like a password, so keep it secret, but remember it, you'll need it later on.
 
-3. ```console
+3. Execute the following: 
+   ```console
    # mkdir -p ~/.irssi2telegram
    # chmod -R go-rwx ~/.irssi2telegram
    # echo "110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw" > ~/.irssi2telegram/token
@@ -81,12 +82,14 @@ running, connected to one or more IRC networks, etc.
 	   }
    };
    ```
+   
    Note that `{message}->{chat}->{type}` should be `private` and the value of `{message}->{chat}->{id}` should equal
    the value of `{message}->{from}->{id}`, here e.g. `123456789`.
    
    Abort test.pl via Ctrl-C.
 
-5. ```console
+5. Execute the following:
+   ```console
    echo "123456789" > .irssi2telegram/destination_channel
    ```
    You need to replace the id by your value of `{message}->{from}->{id}`.
