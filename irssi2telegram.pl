@@ -14,12 +14,17 @@ my $channel_id = read_file($ENV{HOME}."/.irssi2telegram/destination_channel");
 chomp($user);
 chomp($token);
 chomp($channel_id);
+
+
+# touch ~/.irssi2telegram/log to enable debug logging
 my $log;
-open $log, ">", $ENV{HOME}."/irssi2telegram.log" || die "could not open log: $!";
+if (-f $ENV{HOME}."/irssi2telegram/log") {
+	open $log, ">", $ENV{HOME}."/irssi2telegram/log" || die "could not open log: $!";
+}
 
 my $api = WWW::Telegram::BotAPI->new(token => $token);
 my $me = $api->getMe or say $log "could not getMe";
-say $log "I am ". Dumper($me);
+say $log "I am ". Dumper($me) if $log;
 
 my $updates;
 my $offset;
@@ -46,20 +51,20 @@ Irssi::signal_add('print text' => sub {
 sub get_updates {
 	$updates = $api->getUpdates({timeout => 0, $offset?(offset => $offset):()});
 	unless ($updates and ref $updates eq "HASH" and $updates->{ok}) {
-		say $log "updates weird";
+		say $log "updates weird" if $log;
 		next;
 	}
 	for my $u (@{$updates->{result}}) {
 		 $offset = $u->{update_id} + 1 if $u->{update_id} >= $offset;
-		 say $log "Message from " . $u->{message}{from}{username};
-		 say $log Dumper($u);
+		 say $log "Message from " . $u->{message}{from}{username} if $log;
+		 say $log Dumper($u) if $log;
 	}
 }
 
 sub send_text {
 	my $text = shift;
 	my $chat = $api->getChat({chat_id => $channel_id});
-	say $log Dumper($chat);
+	say $log Dumper($chat) if $log;
 	die "username for destination channel does not match" unless $chat->{result}->{username} eq $user;
 	$api->sendMessage({ chat_id => $channel_id, text => "$text", });
 }
